@@ -14,9 +14,9 @@ router.get('/countries', function (req, res, next) {
 
         let promise;
         if (region !== undefined) {
-            promise = Countries.find({region: region});
+            promise = Countries.find({region: region}, {_id: 0});
         } else {
-            promise = Countries.find();
+            promise = Countries.find({}, {_id: 0});
         }
 
         promise.then((data) => {
