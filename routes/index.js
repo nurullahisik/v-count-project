@@ -53,4 +53,45 @@ router.get('/salesrep', async function (req, res, next) {
 });
 /* Salesrep Endpoint End */
 
+/* Optimal Endpoint Begin */
+router.get('/optimal', async function (req, res, next) {
+    try {
+        const response = await axios.get(COUNTRIES_ENDPOINT);
+
+        regions = await groupByRegion(response.data);
+
+        const salesRepRequirements = [];
+        for (const region in regions) {
+            const countriesInRegion = regions[region];
+            const numCountries = countriesInRegion.length;
+            const minReps = Math.ceil(numCountries / 7); // At least 1 rep per 7 countries
+            const maxReps = Math.ceil(numCountries / 3); // At most 1 rep per 3 countries
+            salesRepRequirements.push({
+                region: region,
+                minSalesReq: minReps,
+                maxSalesReq: maxReps,
+                countries: countriesInRegion
+            });
+        }
+
+        const result = [];
+        for (const index in salesRepRequirements) {
+            const {region, minSalesReq, countries} = salesRepRequirements[index];
+            const numCountriesPerRep = Math.floor(countries.length / minSalesReq);
+
+            const assignedCountries = countries.slice(0, numCountriesPerRep);
+            const assignedCountriesName = [];
+            assignedCountries.forEach(country => assignedCountriesName.push(country.name));
+
+            result.push({region: region, counrtyList: assignedCountriesName, counrtyCount: assignedCountries.length});
+        }
+
+        res.json(result);
+
+    } catch (error) {
+        res.status(500).json({error: "Internal Server Error" + error});
+    }
+});
+/* Optimal Endpoint End */
+
 module.exports = router;
