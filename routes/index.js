@@ -83,7 +83,7 @@ router.get('/optimal', async function (req, res, next) {
             const assignedCountriesName = [];
             assignedCountries.forEach(country => assignedCountriesName.push(country.name));
 
-            result.push({region: region, counrtyList: assignedCountriesName, counrtyCount: assignedCountries.length});
+            result.push({region: region, countryList: assignedCountriesName, countryCount: assignedCountries.length});
         }
 
         res.json(result);

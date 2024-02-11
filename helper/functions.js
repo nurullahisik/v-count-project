@@ -1,4 +1,4 @@
-function groupByRegion(data){
+const groupByRegion = data => {
     return data.reduce(function (r, a) {
         a.region = a.region.toUpperCase();
         r[a.region] = r[a.region] || [];
@@ -7,5 +7,4 @@ function groupByRegion(data){
     }, Object.create(null));
 }
 
-
-module.exports.groupByRegion = groupByRegion;
+module.exports = { groupByRegion }
